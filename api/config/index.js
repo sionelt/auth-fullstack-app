@@ -1,10 +1,9 @@
-const nodeEnv = process.env.NODE_ENV
+const path = require('path')
+const dotenv = require('dotenv')
 
-if (nodeEnv == 'development') {
-  require('dotenv').config()
-}
+dotenv.config({ path: path.resolve(__dirname, './.env') })
 
 module.exports = {
-  nodeEnv,
-  localDevPort: process.env.LOCAL_DEV_PORT,
+  nodeEnv: process.env.NODE_ENV,
+  port: process.env.PORT,
 }
