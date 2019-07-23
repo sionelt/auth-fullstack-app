@@ -21,7 +21,21 @@ SPA available at [https://distracted-mccarthy-9b9840.netlify.com](https://distra
 ### Installation
 1. Navigate to api dir `cd api`
 2. Install packages/dependencies `npm install`
-3. Run local development server `npm start`
+3. Run local development server `npm start:local`
 
 ### Deployment
+Install Heroku CLI `npm install -g heroku`
+Authenticate your Heroku account `heroku login`
+Create a heroku app `heroku create auth-oauth-rest-api`
+Connect git repo to Heroku remotely `heroku git:remote -a auth-oauth-rest-api`
+Push only the api dir to Heroku remote master `git subtree push --prefix api/ heroku master` or `npm run deploy`
+View Heroku app logs `heroku logs --tail`
 
+## Database
+1. Create free tier MonogDB instance on Heroku `heroku addons:create mongolab:sandbox`
+2. Fisrt script will return `MONGODB_URI`. Secure it as a config variable on Heroku `heroku config:set DATABASE_URI=[database_uri_here]`
+3. To view `DATABASE_URI` `heroku config:get DATABASE_URI`
+
+## Local Development
+Run REST API server locally on http://localhost:5000 `heroku local web` or `npm run start:api`
+Run Vue SPA locally on http://localhost:8080 `npm run start:client`
