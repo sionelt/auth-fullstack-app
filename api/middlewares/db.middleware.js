@@ -3,17 +3,19 @@ const mongoose = require('mongoose')
 const models = require('../models')
 const config = require('../config')
 
-module.exports = () => {
+module.exports = async () => {
   try {
-    // const { connection } = await mongoose.connect(config.mongodb.uri)
-    console.log('connection: ', config)
+    const { connection } = await mongoose.connect(config.mongodb.uri, { useNewUrlParser: true })
+
+    console.log('> Database connectioned... ')
+
     return (req, res, next) => {
-      req.DB = connection.db
+      req.db = connection.db
       req.models = models
 
       next()
     }
   } catch (error) {
-    next(error)
+    throw error
   }
 }

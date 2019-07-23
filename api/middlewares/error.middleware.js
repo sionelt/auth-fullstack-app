@@ -1,10 +1,20 @@
-module.exports = () => (error, req, res, next) => {
-  const { statusCode, message } = error
+module.exports = {
+  catch404: () => (req, res, next) => {
+    const err = new Error('Not Found')
 
-  console.error(message)
+    err['status'] = 404
 
-  res.status(statusCode || 500).json({
-    success: false,
-    message,
-  })
+    next(err)
+  },
+
+  catchAll: () => (error, req, res, next) => {
+    const { status, message } = error
+
+    console.error(message)
+
+    res.status(status || 500).json({
+      success: false,
+      message,
+    })
+  },
 }
