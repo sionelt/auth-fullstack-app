@@ -7,14 +7,27 @@ module.exports = {
     next(err)
   },
 
+  catch401: () => (error, req, res, next) => {
+    const { name, status, message } = error
+
+    if (name === 'UnauthorizedError') {
+      return res
+        .status(status)
+        .json({
+          message,
+        })
+        .end()
+    }
+
+    return next(error)
+  },
+
   catchAll: () => (error, req, res, next) => {
-    const { status, message } = error
+    const { name, status, message, stack } = error
 
     console.error(message)
+    console.error(stack)
 
-    res.status(status || 500).json({
-      success: false,
-      message,
-    })
+    res.status(status || 500).send({ message })
   },
 }
