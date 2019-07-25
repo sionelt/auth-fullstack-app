@@ -40,8 +40,8 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some(route => route.meta.requiresAuth)) {
     const isAuth = window.localStorage.getItem('jwtToken')
 
-    if (!isAuth) {
-      next({
+    if (isAuth == null) {
+      return next({
         name: 'home',
         query: { redirect: to.fullPath }
       })
