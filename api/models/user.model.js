@@ -12,8 +12,6 @@ const UserSchema = new mongoose.Schema(
       required: [true, 'Please enter a last name'],
     },
 
-    gooogleId: String,
-
     password: String,
 
     salt: String,

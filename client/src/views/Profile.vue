@@ -56,7 +56,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["getCurrentUser", "updateCurrentUser"]),
+    ...mapActions(["getCurrentUser", "updateCurrentUser", "signOut"]),
 
     async updateProfile() {
       try {
@@ -73,6 +73,11 @@ export default {
       } finally {
         this.updating = false;
       }
+    },
+
+    async signingOut() {
+      await this.signOut();
+      this.$router.push('/')
     }
   }
 };
@@ -88,7 +93,7 @@ export default {
           variant="link"
           class="mb-4 mx-auto"
           style="display: block;"
-          @click="$router.push('/')"
+          @click="signingOut"
         >Log out</b-button>
 
         <b-card no-body class="p-2">

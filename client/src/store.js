@@ -33,7 +33,7 @@ export default new Vuex.Store({
       }
     },
 
-    async signUp(c, params) {
+    async signUp (c, params) {
       try {
         const { user, token } = await AuthService.signUp(params)
 
@@ -44,7 +44,7 @@ export default new Vuex.Store({
       }
     },
 
-    async authWithGoogleApi(c, params) {
+    async authWithGoogleApi (c, params) {
       try {
         const { user, token } = await AuthService.authWithGoogleApi(params)
 
@@ -55,10 +55,10 @@ export default new Vuex.Store({
       }
     },
 
-    async signOut(c, params) {
+    async signOut (c, params) {
       try {
         if (window.gapi.auth2) {
-          window.gapi.auth2.getAuthInstance().signOut()
+          await window.gapi.auth2.getAuthInstance().signOut()
           window.gapi.auth2.getAuthInstance().disconnect()
         }
 
@@ -69,7 +69,7 @@ export default new Vuex.Store({
       }
     },
 
-    async getCurrentUser(c) {
+    async getCurrentUser (c) {
       try {
         const { user } = await UserService.getCurrentUser()
 

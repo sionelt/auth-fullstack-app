@@ -78,27 +78,25 @@ const signIn = async (creds, userModel) => {
   }
 }
 
-const authWithGoogleApi = async (user, userModel) => {
+const authWithGoogleApi = async (creds, userModel) => {
   try {
-    const { firstName, lastName, email, googleIdToken } = user
+    const { firstName, lastName, email, googleIdToken } = creds
 
-    const ticket = await Client.verifyIdToken({
+    const ticket = await GoogleOAuth2Client.verifyIdToken({
       idToken: googleIdToken,
       audience: config.googleApi.clientId,
     })
 
     const payload = ticket.getPayload()
-    const googleId = payload['sub']
     const exp = parseInt(payload['exp'], 10)
 
-    let userRec = await userModel.findOne({ googleId })
+    let userRec = await userModel.findOne({ email })
 
     if (!userRec) {
       userRec = await userModel.create({
         firstName,
         lastName,
         email,
-        googleId,
       })
     }
 

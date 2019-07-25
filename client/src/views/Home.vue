@@ -48,10 +48,6 @@ export default {
     }
   },
 
-  created () {
-    this.signOut()
-  },
-
   mounted () {
     window.gapi.load('auth2', () => {
       window.gapi.signin2.render('google-sign-in-btn', {
@@ -63,7 +59,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['signIn', 'signUp', 'signOut', 'authWithGoogleApi']),
+    ...mapActions(['signIn', 'signUp', 'authWithGoogleApi']),
 
     async authenticate () {
       try {
