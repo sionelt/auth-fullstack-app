@@ -1,10 +1,6 @@
-const authMiddleware = require('./auth.middleware')
-const dbMiddleware = require('./db.middleware')
-const errorMiddleware = require('./error.middleware')
-
-
 module.exports = {
-  handleAuth: authMiddleware,
-  handleDbConnection: dbMiddleware,
-  handleError: errorMiddleware,
+  isAuth: require('./auth.middleware'),
+  handleError: require('./error.middleware'),
+  handleDbConnection: require('./db.middleware'),
+  attachCurrentUser: require('./currentUser.middleware'),
 }

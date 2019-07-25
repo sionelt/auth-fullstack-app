@@ -1,3 +1,3 @@
 module.exports = {
-  userModal: require('./user.modal')
+  userModel: require('./user.model')
 }
