@@ -16,6 +16,10 @@ Deployment to Netlify is auto trigger on merged pull requests to `master` branch
 SPA available at [https://distracted-mccarthy-9b9840.netlify.com](https://distracted-mccarthy-9b9840.netlify.com/?target=_blank)
 
 
+## Google API
+1. Create and get client ID by following this: https://developers.google.com/identity/sign-in/web/sign-in
+2. Set `VUE_APP_GOOGLE_SIGN_IN_CLIENT_ID=[client_ID_here]` as a env in `client/.env`. `client/~.env` as a template.
+
 ## REST API
 
 ### Installation
@@ -29,14 +33,15 @@ SPA available at [https://distracted-mccarthy-9b9840.netlify.com](https://distra
 - Create a heroku app `heroku create auth-oauth-rest-api`
 - Connect git repo to Heroku remotely `heroku git:remote -a auth-oauth-rest-api`
 - Push only the api dir to Heroku remote master `git subtree push --prefix api/ heroku master` or `npm run deploy`
+- Set rest api endpoint `VUE_APP_REST_API_ENDPOINT=[heroku_app_endpoint_here]` as a env in `client/.env`. `client/~.env` as a template.
 - View Heroku app logs `heroku logs --tail`
 
 ## Database
 1. Create free tier MonogDB instance on Heroku `heroku addons:create mongolab:sandbox`
 2. To get `MONGODB_URI` for driver connection `heroku config:get MONGODB_URI`:
-    - Development: Set `DATABASE_URI=[mongodb_uri_here]` as a env in `api/.nev`. `~.env` as a template.
-3. To view `DATABASE_URI` ``
+    - Development: Set `MONGODB_URI=[mongodb_uri_here]` as a env in `api/.env`. `api/~.env` as a template.
 
 ## Local Development
+From root dir `/`:
 - Run REST API server locally on http://localhost:5000 `cd api && heroku local web` or `npm run start:api`
 - Run Vue SPA locally on http://localhost:8080 `npm run start:client`
