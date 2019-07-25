@@ -6,7 +6,7 @@ Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
+
   routes: [
     {
       path: '/',
@@ -40,7 +40,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some(route => route.meta.requiresAuth)) {
     const isAuth = window.localStorage.getItem('jwtToken')
 
-    if (isAuth == null) {
+    if (!isAuth) {
       return next({
         name: 'home',
         query: { redirect: to.fullPath }

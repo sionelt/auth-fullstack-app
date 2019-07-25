@@ -63,7 +63,7 @@ export default new Vuex.Store({
         }
 
         c.commit('SET_CURRENT_USER', {})
-        c.commit('SET_AUTH_TOKEN', null)
+        c.commit('SET_AUTH_TOKEN', '')
       } catch (error) {
         throw error
       }
