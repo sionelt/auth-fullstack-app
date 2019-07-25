@@ -1,69 +1,73 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 
 export default {
-  name: 'Home',
+  name: "Home",
 
-  data () {
+  data() {
     return {
-      email: '',
-      password: '',
-      firstName: '',
-      lastName: '',
+      email: "",
+      password: "",
+      firstName: "",
+      lastName: "",
       confirmPassword: null,
       isSignup: false,
       authenticating: false,
-      error: ''
-    }
+      error: ""
+    };
   },
 
   computed: {
-    authBtnText () {
+    authHeading() {
+      return `Sign ${this.isSignup ? "up" : "in"} to your Profile`;
+    },
+
+    authBtnText() {
       return this.isSignup
         ? this.authenticating
-          ? 'SIGNING UP...'
-          : 'SIGN UP'
+          ? "SIGNING UP..."
+          : "SIGN UP"
         : this.authenticating
-          ? 'SIGNING IN...'
-          : 'SIGN IN'
+        ? "SIGNING IN..."
+        : "SIGN IN";
     },
 
-    signUpBtnText () {
-      return this.isSignup ? 'Sign in' : 'Sign up'
+    signUpBtnText() {
+      return this.isSignup ? "Sign in" : "Sign up";
     },
 
-    newPasswrodMatched () {
-      return this.password === this.confirmPassword
+    newPasswrodMatched() {
+      return this.password === this.confirmPassword;
     },
 
-    isFormValid () {
-      const signinFormValid = this.email && this.password
+    isFormValid() {
+      const signinFormValid = this.email && this.password;
       const signupFormValid =
         signinFormValid &&
         this.firstName &&
         this.lastName &&
-        this.newPasswrodMatched
+        this.newPasswrodMatched;
 
-      return this.isSignup ? signupFormValid : signinFormValid
+      return this.isSignup ? signupFormValid : signinFormValid;
     }
   },
 
-  mounted () {
-    window.gapi.load('auth2', () => {
-      window.gapi.signin2.render('google-sign-in-btn', {
-        theme: 'dark',
+  mounted() {
+    window.gapi.load("auth2", () => {
+      window.gapi.signin2.render("google-sign-in-btn", {
+        theme: "dark",
         longtitle: true,
         onsuccess: this.signInWithGoogle
-      })
-    })
+      });
+    });
   },
 
   methods: {
-    ...mapActions(['signIn', 'signUp', 'authWithGoogleApi']),
+    ...mapActions(["signIn", "signUp", "authWithGoogleApi"]),
 
-    async authenticate () {
+    async authenticate() {
       try {
-        this.authenticating = true
+        this.authenticating = true;
 
         if (this.isSignup) {
           await this.signUp({
@@ -71,49 +75,49 @@ export default {
             lastName: this.lastName,
             email: this.email,
             password: this.password
-          })
+          });
         } else {
           await this.signIn({
             email: this.email,
             password: this.password
-          })
+          });
         }
 
         this.$router.push({
-          name: 'profile'
-        })
+          name: "profile"
+        });
       } catch (error) {
-        console.error(error)
-        this.error = error.message
+        console.error(error);
+        this.error = error.message;
       } finally {
-        this.authenticating = false
+        this.authenticating = false;
       }
     },
 
-    async signInWithGoogle (googleUser) {
+    async signInWithGoogle(googleUser) {
       try {
-        const profile = googleUser.getBasicProfile()
+        const profile = googleUser.getBasicProfile();
         const profilePayload = {
           email: profile.getEmail(),
           firstName: profile.getGivenName(),
           lastName: profile.getFamilyName(),
           googleIdToken: googleUser.getAuthResponse().id_token
-        }
+        };
 
-        await this.authWithGoogleApi(profilePayload)
+        await this.authWithGoogleApi(profilePayload);
 
         this.$router.push({
-          name: 'profile'
-        })
+          name: "profile"
+        });
       } catch (error) {
-        console.error(error)
-        this.error = error.message
+        console.error(error);
+        this.error = error.message;
       } finally {
-        this.authenticating = false
+        this.authenticating = false;
       }
     }
   }
-}
+};
 </script>
 
 <template>
@@ -122,10 +126,10 @@ export default {
       <div class="col-xl-3 col-lg-5 col-md-7 mx-auto">
         <h1 class="text-primary text-center mb-4">Your Profile</h1>
         <b-card no-body class="p-2">
-          <b-card-header class="text-center">Sign in to your Profile</b-card-header>
+          <b-card-header class="text-center">{{ authHeading }}</b-card-header>
 
           <b-card-body>
-            <b-alert variant="danger" :show="error" v-if="error">ERROR:  {{ error }}</b-alert>
+            <b-alert variant="danger" :show="error" v-if="error">ERROR: {{ error }}</b-alert>
 
             <div class="d-flex justify-content-center mb-4">
               <div id="google-sign-in-btn" class="g-signin2"></div>
