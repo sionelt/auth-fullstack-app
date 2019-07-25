@@ -1,25 +1,56 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Home from '@/views/Home.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: {
+        title: 'Home'
+      }
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/views/Profile.vue'),
+      meta: {
+        requiresAuth: true,
+        title: 'Profile'
+      }
     }
   ]
 })
+
+router.beforeEach(async (to, from, next) => {
+  const baseTitle = 'Your Profile'
+  const nearestWithTitle = to.matched
+    .slice()
+    .reverse()
+    .find(r => r.meta && r.meta.title)
+
+  document.title = nearestWithTitle ? `${nearestWithTitle.meta.title} - ${baseTitle}` : baseTitle
+
+  if (to.matched.some(route => route.meta.requiresAuth)) {
+    const isAuth = window.localStorage.getItem('jwtToken')
+
+    if (!isAuth) {
+      next({
+        name: 'home',
+        query: { redirect: to.fullPath }
+      })
+    }
+
+    next()
+  } else {
+    next()
+  }
+})
+
+export default router

@@ -1,10 +1,33 @@
-module.exports = () => (error, req, res, next) => {
-  const { statusCode, message } = error
+module.exports = {
+  catch404: () => (req, res, next) => {
+    const err = new Error('Not Found')
 
-  console.error(message)
+    err['status'] = 404
 
-  res.status(statusCode || 500).json({
-    success: false,
-    message,
-  })
+    next(err)
+  },
+
+  catch401: () => (error, req, res, next) => {
+    const { name, status, message } = error
+
+    if (name === 'UnauthorizedError') {
+      return res
+        .status(status)
+        .json({
+          message,
+        })
+        .end()
+    }
+
+    return next(error)
+  },
+
+  catchAll: () => (error, req, res, next) => {
+    const { name, status, message, stack } = error
+
+    console.error(message)
+    console.error(stack)
+
+    res.status(status || 500).send({ message })
+  },
 }

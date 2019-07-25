@@ -1,32 +1,27 @@
 'use strict'
 
-const awsServerlessExpress = require('aws-serverless-express')
-const app = require('./app')
+const cors = require('cors')
+const express = require('express')
+const bodyParser = require('body-parser')
 
-// NOTE: If you get ERR_CONTENT_DECODING_FAILED in your browser, this is likely
-// due to a compressed response (e.g. gzip) which has not been handled correctly
-// by aws-serverless-express and/or API Gateway. Add the necessary MIME types to
-// binaryMimeTypes below, then redeploy (`npm run package-deploy`)
-let binaryMimeTypes = [
-  // 'application/javascript',
-  'application/json',
-  // 'application/octet-stream',
-  // 'application/xml',
-  // 'font/eot',
-  // 'font/opentype',
-  // 'font/otf',
-  // 'image/jpeg',
-  // 'image/png',
-  // 'image/svg+xml',
-  // 'text/comma-separated-values',
-  // 'text/css',
-  // 'text/html',
-  // 'text/javascript',
-  // 'text/plain',
-  // 'text/text',
-  // 'text/xml'
-]
+const config = require('./config')
+const routes = require('./routes')
+const { handleDbConnection, handleError } = require('./middlewares')
 
-const server = awsServerlessExpress.createServer(app, null, binaryMimeTypes)
+;(async () => {
+  const app = express()
 
-exports.handler = (event, context) => awsServerlessExpress.proxy(server, event, context)
+  app.use(cors())
+  app.use(bodyParser.json())
+  app.use(await handleDbConnection())
+
+  app.use('/api', routes(express.Router))
+
+  app.use(handleError.catch404())
+  app.use(handleError.catch401())
+  app.use(handleError.catchAll())
+
+  app.listen(config.port, () => {
+    console.log(`REST API listening at http://locahost:${config.port}`)
+  })
+})()

@@ -1,5 +1,6 @@
-const errorMiddleware = require('./error.middleware')
-
 module.exports = {
-  handleError: errorMiddleware
+  isAuth: require('./auth.middleware'),
+  handleError: require('./error.middleware'),
+  handleDbConnection: require('./db.middleware'),
+  attachCurrentUser: require('./currentUser.middleware'),
 }
