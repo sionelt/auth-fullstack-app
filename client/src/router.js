@@ -7,14 +7,16 @@ Vue.use(Router)
 const router = new Router({
   mode: 'history',
 
+  base: process.env.BASE_URL,
+
   routes: [
     {
       path: '/',
       name: 'home',
       component: Home,
       meta: {
-        title: 'Home'
-      }
+        title: 'Home',
+      },
     },
     {
       path: '/profile',
@@ -22,10 +24,10 @@ const router = new Router({
       component: () => import('@/views/Profile.vue'),
       meta: {
         requiresAuth: true,
-        title: 'Profile'
-      }
-    }
-  ]
+        title: 'Profile',
+      },
+    },
+  ],
 })
 
 router.beforeEach(async (to, from, next) => {
