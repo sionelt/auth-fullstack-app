@@ -13,7 +13,7 @@
 
 Deployment to Netlify is auto trigger on merged pull requests to `master` branch
 
-SPA available at [https://distracted-mccarthy-9b9840.netlify.com](https://distracted-mccarthy-9b9840.netlify.com/?target=_blank)
+SPA available at [https://distracted-mccarthy-9b9840.netlify.app](https://distracted-mccarthy-9b9840.netlify.app/?target=_blank)
 
 
 ## Google API
